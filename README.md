@@ -3,6 +3,14 @@
 
 ## Problem:
 
+![GitHub stars](https://img.shields.io/github/stars/charithjayasanka/Gmail2GoogleChat?style=social)
+![GitHub forks](https://img.shields.io/github/forks/charithjayasanka/Gmail2GoogleChat?style=social)
+![GitHub issues](https://img.shields.io/github/issues/charithjayasanka/Gmail2GoogleChat)
+![GitHub license](https://img.shields.io/github/license/charithjayasanka/Gmail2GoogleChat)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/charithjayasanka/Gmail2GoogleChat)
+![GitHub last commit](https://img.shields.io/github/last-commit/charithjayasanka/Gmail2GoogleChat)
+
+
 In a fast-paced corporate environment, it's easy to miss critical emails amidst the flood of daily messages. You may have already set up filters to capture important emails, but enabling notifications for every message isn't feasible — the noise would be overwhelming. As a result, important emails often slip through the cracks.
 
 ### The Solution:
@@ -75,6 +83,24 @@ The script will now automatically check for new emails at your defined intervals
 - Keep your webhook URL secure and avoid exposing it in public repositories.
 - The script processes up to 10 email threads at a time to ensure efficiency.
 - Processed emails are labeled with `sentToChat` to avoid duplicates.
+
+---
+
+## Contributing:
+
+Contributions are welcome! If you'd like to contribute to this project, you can do so in the following ways:
+
+1. **Fork the Repository**: Click on the "Fork" button at the top-right corner of the repository page to create your own copy. You can clone your fork locally, make your changes, and submit a pull request (PR) to propose your improvements.
+
+2. **Raise an Issue**: If you encounter any bugs, have suggestions, or would like to request a new feature, please raise an issue by navigating to the "Issues" tab and clicking "New Issue." Provide a detailed description so we can help address it quickly.
+
+3. **Pull Requests**: To submit a PR:
+   - Fork this repository.
+   - Create a branch in your fork with a descriptive name for the feature you're adding (e.g., `add-feature-x`).
+   - Make your changes and commit them with a meaningful message.
+   - Push the changes to your forked repository and open a PR against this repository's `main` branch.
+
+We appreciate your contributions to improve the functionality of this script!
 
 ---
 
