@@ -1,8 +1,6 @@
 
 # Gmail to Google Chat: Real-Time Email Notifications via Webhook
 
-## Problem:
-
 ![GitHub stars](https://img.shields.io/github/stars/charithjayasanka/Gmail2GoogleChat?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/charithjayasanka/Gmail2GoogleChat?style=social)
 ![GitHub issues](https://img.shields.io/github/issues/charithjayasanka/Gmail2GoogleChat)
@@ -10,6 +8,21 @@
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/charithjayasanka/Gmail2GoogleChat)
 ![GitHub last commit](https://img.shields.io/github/last-commit/charithjayasanka/Gmail2GoogleChat)
 
+## Table of Contents
+
+- [Problem](#problem)
+- [The Solution](#the-solution)
+- [Features](#features)
+- [How It Works](#how-it-works)
+- [Setup Instructions](#setup-instructions)
+- [Example Use Case](#example-use-case)
+- [Important Notes](#important-notes)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Problem:
 
 In a fast-paced corporate environment, it's easy to miss critical emails amidst the flood of daily messages. You may have already set up filters to capture important emails, but enabling notifications for every message isn't feasible — the noise would be overwhelming. As a result, important emails often slip through the cracks.
 
@@ -31,13 +44,53 @@ This script provides a seamless way to integrate Gmail and Google Chat to ensure
 
 ## How It Works:
 
-1. **Gmail Label**: The script filters emails based on a Gmail label that you specify. This allows you to notify only on the emails that matter to you, rather than the entire inbox.
+1. **Checking Weekdays and Time**: The script only runs during weekdays and business hours (8 AM - 6 PM) to prevent unnecessary notifications outside of working hours.
 
-2. **Webhook**: Emails are sent to a Google Chat room using a webhook. You can configure the Google Chat room to receive instant alerts for emails that meet your filter criteria.
+```javascript
+var now = new Date();
+var currentHour = now.getHours();
+var currentDay = now.getDay(); // Sunday is 0, Monday is 1, ..., Saturday is 6
 
-3. **Working Hours**: The script runs only during weekdays and business hours, ensuring that you're only alerted when you're at work.
+if (currentDay >= 1 && currentDay <= 5 && currentHour >= 8 && currentHour <= 18) {
+  // Continue processing emails
+} else {
+  Logger.log("It's either not a weekday or not between 8 AM and 6 PM. Skipping email processing.");
+}
+```
 
-4. **Automatic Labeling**: After processing an email, the script adds a custom label (`sentToChat`) to the email to ensure the same email is not processed and sent to Google Chat multiple times.
+2. **Filtering Emails Using Gmail Labels**: The script searches for unread emails under the specified Gmail label and excludes those already processed.
+
+```javascript
+var label = 'generic-label'; // Replace this with your Gmail label
+var searchQuery = `label:${label} is:unread -label:sentToChat`;
+var threads = GmailApp.search(searchQuery);
+```
+
+3. **Processing and Sending Notifications to Google Chat**: The script sends a message with the subject and snippet of the email to the configured Google Chat room using a webhook.
+
+```javascript
+var emailSubject = message.getSubject();
+var emailSnippet = message.getPlainBody().substring(0, 500); // First 500 characters of the email body
+var chatMessage = {
+  text: `📧 **New Email Alert**:
+*Subject*: ${emailSubject}
+*Snippet*: ${emailSnippet}`
+};
+
+var options = {
+  method: 'post',
+  contentType: 'application/json',
+  payload: JSON.stringify(chatMessage)
+};
+
+UrlFetchApp.fetch(webhookUrl, options);
+```
+
+4. **Marking Emails as Processed**: Once an email has been sent to Google Chat, it is marked with the `sentToChat` label to avoid reprocessing.
+
+```javascript
+thread.addLabel(sentToChatLabel);
+```
 
 ---
 
@@ -63,9 +116,9 @@ This script provides a seamless way to integrate Gmail and Google Chat to ensure
 ### 5. Set Up a Time-Driven Trigger:
 - In Google Apps Script, click on the clock icon (Triggers) in the left sidebar.
 - Click on **"Add Trigger"** and configure:
-  - **Choose which function to run:** Select the function (e.g., `sendFilteredEmailsToGoogleChat`).
-  - **Select event source:** Choose **"Time-driven"**.
-  - **Type of time-based trigger:** Set the interval (e.g., every 10 minutes, hourly) based on your preference.
+    - **Choose which function to run:** Select the function (e.g., `sendFilteredEmailsToGoogleChat`).
+    - **Select event source:** Choose **"Time-driven"**.
+    - **Type of time-based trigger:** Set the interval (e.g., every 10 minutes, hourly) based on your preference.
 
 The script will now automatically check for new emails at your defined intervals and send real-time notifications to Google Chat.
 
@@ -95,10 +148,10 @@ Contributions are welcome! If you'd like to contribute to this project, you can 
 2. **Raise an Issue**: If you encounter any bugs, have suggestions, or would like to request a new feature, please raise an issue by navigating to the "Issues" tab and clicking "New Issue." Provide a detailed description so we can help address it quickly.
 
 3. **Pull Requests**: To submit a PR:
-   - Fork this repository.
-   - Create a branch in your fork with a descriptive name for the feature you're adding (e.g., `add-feature-x`).
-   - Make your changes and commit them with a meaningful message.
-   - Push the changes to your forked repository and open a PR against this repository's `main` branch.
+    - Fork this repository.
+    - Create a branch in your fork with a descriptive name for the feature you're adding (e.g., `add-feature-x`).
+    - Make your changes and commit them with a meaningful message.
+    - Push the changes to your forked repository and open a PR against this repository's `main` branch.
 
 We appreciate your contributions to improve the functionality of this script!
 
